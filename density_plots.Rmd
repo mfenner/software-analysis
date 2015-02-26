@@ -1,0 +1,23 @@
+---
+title: "Density Plots"
+output: html_document
+---
+
+Collect metrics for a list of Github repos stored in a CSV file.
+
+
+```{r}
+require("alm")
+packages <- read.csv("github_repos.csv", encoding = "UTF8", sep = ",", stringsAsFactors=FALSE)
+canonical_urls <- packages$url
+
+alm <- alm_ids(canonical_url = canonical_urls, total_details = TRUE)
+alm <- ldply(alm$data)
+```
+
+Density plot for Europe PMC citations.
+
+```{r, echo=FALSE}
+plot_density(alm)
+```
+
