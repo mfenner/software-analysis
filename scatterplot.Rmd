@@ -1,0 +1,33 @@
+---
+title: "Density Plots"
+output:
+  html_document:
+    keep_md: true
+---
+
+Collect metrics for a list of Github repos for scientific software stored in a CSV file.
+
+```{r, results="hide"}
+require("alm")
+require("plyr")
+require("ggplot2")
+packages <- read.csv("github_repos.csv", encoding = "UTF8", sep = ",", stringsAsFactors=FALSE)
+alm <- alm_ids(url = packages$url, api_url = "http://software.lagotto.io/api/v5/articles", total_details = TRUE)
+alm <- ldply(alm$data)
+# transform 0 values for log scaling
+alm$github_likes[alm$github_likes == 0] <- 0.01
+alm$github_readers[alm$github_readers == 0] <- 0.01
+alm$europe_pmc_fulltext_total[alm$europe_pmc_fulltext_total == 0] <- 0.01
+```
+
+Scatterplot of Github stargazers vs. forks.
+
+```{r}
+ggplot(alm, aes(x=github_likes, y=github_readers)) +
+  geom_point() + 
+  geom_smooth(method=lm) +
+  scale_x_log10(name = "Github Stargazers", limits = c(1,10000), breaks=c(1, 10, 100, 1000)) + 
+  scale_y_log10(name = "Github Forks", limits = c(1,10000), breaks=c(1, 10, 100, 1000)) + 
+  theme(panel.background = element_rect(fill = "white"),
+        axis.line = element_line(colour = "grey")) 
+```
