@@ -37,7 +37,7 @@ alm <- ldply(alm$data)
 # transform 0 values for log scaling
 alm$github_likes[alm$github_likes == 0] <- 0.01
 alm$github_readers[alm$github_readers == 0] <- 0.01
-alm$europe_pmc_fulltext_total[alm$europe_pmc_fulltext_total == 0] <- 0.01
+alm$facebook_total[alm$facebook_total == 0] <- 0.01
 ```
 
 Scatterplot of Github stargazers vs. forks.
@@ -65,4 +65,27 @@ ggplot(alm, aes(x=github_likes, y=github_readers)) +
 ## Warning: Removed 4 rows containing missing values (geom_path).
 ```
 
-![](scatterplot_files/figure-html/unnamed-chunk-2-1.png) 
+![](scatterplot_files/figure-html/github_likes_readers-1.png) 
+
+Scatterplot of Facebook vs. Github forks.
+
+
+```r
+ggplot(alm, aes(x=facebook_total, y=github_readers)) +
+  geom_point() + 
+  geom_smooth(method=lm) +
+  scale_x_log10(name = "Facebook", limits = c(1,10000), breaks=c(1, 10, 100, 1000)) + 
+  scale_y_log10(name = "Github Forks", limits = c(1,10000), breaks=c(1, 10, 100, 1000)) + 
+  theme(panel.background = element_rect(fill = "white"),
+        axis.line = element_line(colour = "grey")) 
+```
+
+```
+## Warning: Removed 420 rows containing missing values (stat_smooth).
+```
+
+```
+## Warning: Removed 420 rows containing missing values (geom_point).
+```
+
+![](scatterplot_files/figure-html/facebook_github_readers-1.png) 
