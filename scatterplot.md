@@ -1,4 +1,4 @@
-# Density Plots
+# Scatterplots
 
 Collect metrics for a list of Github repos for scientific software stored in a CSV file.
 
